@@ -44,7 +44,6 @@ h1 {
   margin: 40px 0;
   font-size: 64px;
   line-height: 70px;
-  font-weight: bold;
 
   @media (max-width: 1024px) {
     margin: 24px 0;
@@ -72,8 +71,6 @@ p {
 }
 
 a {
-  color: currentColor;
-
   &:focus {
     opacity: 0.8;
     outline: none;

@@ -12,8 +12,12 @@ const nextConfig: NextConfig = {
       {
         pathname: '/api/media/file/**',
       },
+      {
+        pathname: '/assets/**',
+      },
     ],
   },
+
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
@@ -23,6 +27,7 @@ const nextConfig: NextConfig = {
 
     return webpackConfig
   },
+
   turbopack: {
     root: path.resolve(dirname),
   },

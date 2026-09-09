@@ -6,6 +6,9 @@ import { fileURLToPath } from 'url'
 
 import config from '@/payload.config'
 import './styles.css'
+import { Card } from '@/components/Card'
+import { randomBytes } from 'crypto'
+import Link from 'next/link'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -15,45 +18,39 @@ export default async function HomePage() {
 
   const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
 
+  const posts = await payload.find({
+    collection: 'posts',
+    depth: 1,
+    limit: 3,
+    where: {
+      status: { equals: 'published' },
+    },
+  })
+
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
+    <div className="items-center justify-evenly w-full flex flex-col h-[90vh]">
+      <div className="text-center items-center flex flex-col">
+        <h1 className="max-w-lg">Getting used to payload</h1>
+        <div className="text-gray-300 max-w-xl">
+          This application was made to get familiar with some of the core concepts of Payload, such
+          as fetching data from Local API, routing and pagination.
+        </div>
+        <Link href="/blog">
+          <button className="mt-5 bg-gray-200 px-3 py-1.5 text-sm rounded-md border-2 border-gray-50 text-gray-800 cursor-pointer font-semibold">
+            All posts
+          </button>
+        </Link>
+      </div>
+
+      <div className="flex flex-col gap-6 w-2/3 mx-auto">
+        <div className="font-semibold text-white text-xl">Recent posts:</div>
+        <div className="flex gap-10">
+          {posts.docs.map((post, i) => {
+            return <Card key={i} post={post} />
+          })}
         </div>
       </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
+      <Image fill className="-z-10 object-cover" priority src="/assets/image-hero1.webp" alt="" />
     </div>
   )
 }
